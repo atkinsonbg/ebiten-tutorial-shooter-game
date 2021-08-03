@@ -8,8 +8,8 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-var windowWidth = 640
-var windowHeight = 480
+var windowWidth = 900
+var windowHeight = 520
 
 type Game struct {
 	tick float64
@@ -27,6 +27,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	g.updateTick()
 
 	scenes.BackgroundScene(screen, windowWidth, windowHeight)
+	scenes.DuckScene(screen, windowWidth, windowHeight, g.tick)
 	scenes.WaveScene(screen, windowWidth, windowHeight, g.tick)
 	scenes.WoodScene(screen, windowWidth, windowHeight)
 	scenes.CurtainsScene(screen, windowWidth, windowHeight)

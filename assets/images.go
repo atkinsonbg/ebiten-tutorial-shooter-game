@@ -14,38 +14,42 @@ import (
 var content embed.FS
 
 func Curtain() *ebiten.Image {
-	return getSubimageByName("curtain")
+	return getSubimageByName("images/stall.json","curtain", "stall_sprite.png")
 }
 
 func CurtainStraight() *ebiten.Image {
-	return getSubimageByName("curtain_straight")
+	return getSubimageByName("images/stall.json","curtain_straight", "stall_sprite.png")
 }
 
 func BackgroundGreen() *ebiten.Image {
-	return getSubimageByName("bg_green")
+	return getSubimageByName("images/stall.json","bg_green", "stall_sprite.png")
 }
 
 func Wood() *ebiten.Image {
-	return getSubimageByName("bg_wood")
+	return getSubimageByName("images/stall.json","bg_wood", "stall_sprite.png")
 }
 
 func Wave() *ebiten.Image {
-	return getSubimageByName("wave")
+	return getSubimageByName("images/stall.json","wave", "stall_sprite.png")
 }
 
-func getSubimageByName(name string) *ebiten.Image {
-	jsonBytes, _ := content.ReadFile("images/stall.json")
+func Duck() *ebiten.Image {
+	return getSubimageByName("images/objects.json","duck", "objects_sprite.png")
+}
+
+func getSubimageByName(jsonFile string, jsonName string, spriteSheet string) *ebiten.Image {
+	jsonBytes, _ := content.ReadFile(jsonFile)
 	jsonMap := map[string]interface{}{}
 	_ = json.Unmarshal(jsonBytes, &jsonMap)
-	coordinates := jsonMap[name].(map[string]interface{})
+	coordinates := jsonMap[jsonName].(map[string]interface{})
 
-	spriteSheet := getEbitenImage("stall_sprite.png")
+	sheet := getEbitenImage(spriteSheet)
 	xCoor := int(coordinates["x"].(float64))
 	yCoor := int(coordinates["y"].(float64))
 	wCoor := int(coordinates["x"].(float64)) + int(coordinates["w"].(float64))
 	hCoor := int(coordinates["y"].(float64)) + int(coordinates["h"].(float64))
 	rect := image.Rect(xCoor, yCoor, wCoor, hCoor)
-	return spriteSheet.SubImage(rect).(*ebiten.Image)
+	return sheet.SubImage(rect).(*ebiten.Image)
 }
 
 func getEbitenImage(name string) *ebiten.Image {

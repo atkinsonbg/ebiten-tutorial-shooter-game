@@ -7,6 +7,7 @@ import (
 
 func WaveScene(screen *ebiten.Image, windowWidth int, windowHeight int, currentTick float64) {
 	imgWaveX := -30
+	imgWaveY := 320.00
 
 	if currentTick <= 30 {
 		imgWaveX = imgWaveX + int(currentTick)
@@ -16,10 +17,9 @@ func WaveScene(screen *ebiten.Image, windowWidth int, windowHeight int, currentT
 
 	imgWave := assets.Wave()
 	imgWaveWidth := imgWave.Bounds().Dx()
-	imgWaveHeight := 280.00
 	for imgWaveX < windowWidth {
 		imgWoodOpts := &ebiten.DrawImageOptions{}
-		imgWoodOpts.GeoM.Translate(float64(imgWaveX), imgWaveHeight)
+		imgWoodOpts.GeoM.Translate(float64(imgWaveX), imgWaveY)
 		screen.DrawImage(imgWave, imgWoodOpts)
 		imgWaveX = imgWaveWidth + imgWaveX
 	}
