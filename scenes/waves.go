@@ -5,17 +5,19 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-func WaveScene(screen *ebiten.Image, windowWidth int, windowHeight int, currentTick float64) {
+func WaveScene(screen *ebiten.Image, windowWidth int, windowHeight int, currentTick float64, json []byte, sprite []byte) {
 	imgWaveX := -30
 	imgWaveY := 320.00
 
 	if currentTick <= 30 {
 		imgWaveX = imgWaveX + int(currentTick)
+		imgWaveY = imgWaveY + currentTick
 	} else {
 		imgWaveX = (imgWaveX + int(currentTick)) * -1
+		imgWaveY = (imgWaveY + 30) - (currentTick - 30)
 	}
 
-	imgWave := assets.Wave()
+	imgWave := assets.Wave(json, sprite)
 	imgWaveWidth := imgWave.Bounds().Dx()
 	for imgWaveX < windowWidth {
 		imgWoodOpts := &ebiten.DrawImageOptions{}

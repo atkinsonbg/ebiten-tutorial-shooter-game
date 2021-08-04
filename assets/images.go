@@ -2,7 +2,6 @@ package assets
 
 import (
 	"bytes"
-	"embed"
 	"encoding/json"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
@@ -10,40 +9,40 @@ import (
 	"log"
 )
 
-//go:embed images/*
-var content embed.FS
-
-func Curtain() *ebiten.Image {
-	return getSubimageByName("images/stall.json","curtain", "stall_sprite.png")
+func Curtain(json []byte, sprite []byte) *ebiten.Image {
+	return getSubimageByName(json,"curtain", sprite)
 }
 
-func CurtainStraight() *ebiten.Image {
-	return getSubimageByName("images/stall.json","curtain_straight", "stall_sprite.png")
+func CurtainStraight(json []byte, sprite []byte) *ebiten.Image {
+	return getSubimageByName(json,"curtain_straight", sprite)
 }
 
-func BackgroundGreen() *ebiten.Image {
-	return getSubimageByName("images/stall.json","bg_green", "stall_sprite.png")
+func BackgroundGreen(json []byte, sprite []byte) *ebiten.Image {
+	return getSubimageByName(json,"bg_green", sprite)
 }
 
-func Wood() *ebiten.Image {
-	return getSubimageByName("images/stall.json","bg_wood", "stall_sprite.png")
+func Wood(json []byte, sprite []byte) *ebiten.Image {
+	return getSubimageByName(json,"bg_wood", sprite)
 }
 
-func Wave() *ebiten.Image {
-	return getSubimageByName("images/stall.json","wave", "stall_sprite.png")
+func Wave(json []byte, sprite []byte) *ebiten.Image {
+	return getSubimageByName(json,"wave", sprite)
 }
 
-func Duck() *ebiten.Image {
-	return getSubimageByName("images/objects.json","duck", "objects_sprite.png")
+func Duck(json []byte, sprite []byte) *ebiten.Image {
+	return getSubimageByName(json,"duck", sprite)
 }
 
-func getSubimageByName(jsonFile string, jsonName string, spriteSheet string) *ebiten.Image {
-	jsonBytes, _ := content.ReadFile(jsonFile)
+func Stick(json []byte, sprite []byte) *ebiten.Image {
+	return getSubimageByName(json,"stick", sprite)
+}
+
+func getSubimageByName(jsonBytes []byte, jsonName string, spriteBytes []byte) *ebiten.Image {
 	jsonMap := map[string]interface{}{}
 	_ = json.Unmarshal(jsonBytes, &jsonMap)
 	coordinates := jsonMap[jsonName].(map[string]interface{})
 
-	sheet := getEbitenImage(spriteSheet)
+	sheet := getEbitenImage(spriteBytes)
 	xCoor := int(coordinates["x"].(float64))
 	yCoor := int(coordinates["y"].(float64))
 	wCoor := int(coordinates["x"].(float64)) + int(coordinates["w"].(float64))
@@ -52,13 +51,8 @@ func getSubimageByName(jsonFile string, jsonName string, spriteSheet string) *eb
 	return sheet.SubImage(rect).(*ebiten.Image)
 }
 
-func getEbitenImage(name string) *ebiten.Image {
-	imgBytes, err := content.ReadFile("images/" + name)
-	if err != nil {
-		log.Panic()
-	}
-
-	pngImage, err := png.Decode(bytes.NewReader(imgBytes))
+func getEbitenImage(spriteBytes []byte) *ebiten.Image {
+	pngImage, err := png.Decode(bytes.NewReader(spriteBytes))
 	if err != nil {
 		log.Panic()
 	}

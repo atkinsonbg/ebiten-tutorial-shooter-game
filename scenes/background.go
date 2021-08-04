@@ -5,8 +5,8 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-func BackgroundScene(screen *ebiten.Image, windowWidth int, windowHeight int) {
-	imgBackground := assets.BackgroundGreen()
+func BackgroundScene(screen *ebiten.Image, windowWidth int, windowHeight int, json []byte, sprite []byte) {
+	imgBackground := assets.BackgroundGreen(json, sprite)
 	imgBackgroundX := 0
 	imgBackgroundY := imgBackground.Bounds().Dy()
 	imgBackgroundWidth := imgBackground.Bounds().Dx()
