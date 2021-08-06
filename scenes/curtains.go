@@ -5,19 +5,19 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-func CurtainsScene(screen *ebiten.Image, windowWidth int, windowHeight int, json []byte, sprite []byte) {
+func CurtainsScene(screen *ebiten.Image, windowWidth int, windowHeight int) {
 	// Curtain sides (left)
-	screen.DrawImage(assets.Curtain(json, sprite), nil)
+	screen.DrawImage(assets.Curtain(), nil)
 
 	// Curtain sides (right)
 	curtainSideOpts := &ebiten.DrawImageOptions{}
 	curtainSideOpts.GeoM.Scale(-1,1) // Flip it
 	curtainSideOpts.GeoM.Translate(float64(windowWidth),0) // Weird, I would have thought I needed to subtract the width of the image here!
-	screen.DrawImage(assets.Curtain(json, sprite), curtainSideOpts)
+	screen.DrawImage(assets.Curtain(), curtainSideOpts)
 
 	// Curtain top
 	curtainX := 0
-	imgCurtainTop := assets.CurtainStraight(json, sprite)
+	imgCurtainTop := assets.CurtainStraight()
 	curtainTopWidth := imgCurtainTop.Bounds().Dx()
 	for curtainX < windowWidth {
 		curtainOpts := &ebiten.DrawImageOptions{}

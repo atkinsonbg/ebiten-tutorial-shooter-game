@@ -1,61 +1,47 @@
 package assets
 
 import (
-	"bytes"
-	"encoding/json"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
-	"image/png"
-	"log"
 )
 
-func Curtain(json []byte, sprite []byte) *ebiten.Image {
-	return getSubimageByName(json,"curtain", sprite)
+func init() {
+
 }
 
-func CurtainStraight(json []byte, sprite []byte) *ebiten.Image {
-	return getSubimageByName(json,"curtain_straight", sprite)
+func Curtain() *ebiten.Image {
+	return getSubimage(StallSpritesheet, GetSubImageCoordinates(StallSpriteJsonBytes, "curtain"))
 }
 
-func BackgroundGreen(json []byte, sprite []byte) *ebiten.Image {
-	return getSubimageByName(json,"bg_green", sprite)
+func CurtainStraight() *ebiten.Image {
+	return getSubimage(StallSpritesheet, GetSubImageCoordinates(StallSpriteJsonBytes, "curtain_straight"))
 }
 
-func Wood(json []byte, sprite []byte) *ebiten.Image {
-	return getSubimageByName(json,"bg_wood", sprite)
+func BackgroundGreen() *ebiten.Image {
+	return getSubimage(StallSpritesheet, GetSubImageCoordinates(StallSpriteJsonBytes, "bg_green"))
 }
 
-func Wave(json []byte, sprite []byte) *ebiten.Image {
-	return getSubimageByName(json,"wave", sprite)
+func Wood() *ebiten.Image {
+	return getSubimage(StallSpritesheet, GetSubImageCoordinates(StallSpriteJsonBytes, "bg_wood"))
 }
 
-func Duck(json []byte, sprite []byte) *ebiten.Image {
-	return getSubimageByName(json,"duck", sprite)
+func Wave() *ebiten.Image {
+	return getSubimage(StallSpritesheet, GetSubImageCoordinates(StallSpriteJsonBytes, "wave"))
 }
 
-func Stick(json []byte, sprite []byte) *ebiten.Image {
-	return getSubimageByName(json,"stick", sprite)
+func Duck() *ebiten.Image {
+	return getSubimage(ObjectsSpritesheet, GetSubImageCoordinates(ObjectsSpriteJsonBytes, "duck"))
 }
 
-func getSubimageByName(jsonBytes []byte, jsonName string, spriteBytes []byte) *ebiten.Image {
-	jsonMap := map[string]interface{}{}
-	_ = json.Unmarshal(jsonBytes, &jsonMap)
-	coordinates := jsonMap[jsonName].(map[string]interface{})
+func Stick() *ebiten.Image {
+	return getSubimage(ObjectsSpritesheet, GetSubImageCoordinates(ObjectsSpriteJsonBytes, "stick"))
+}
 
-	sheet := getEbitenImage(spriteBytes)
+func getSubimage(spritesheet *ebiten.Image, coordinates map[string]interface{}) *ebiten.Image {
 	xCoor := int(coordinates["x"].(float64))
 	yCoor := int(coordinates["y"].(float64))
 	wCoor := int(coordinates["x"].(float64)) + int(coordinates["w"].(float64))
 	hCoor := int(coordinates["y"].(float64)) + int(coordinates["h"].(float64))
 	rect := image.Rect(xCoor, yCoor, wCoor, hCoor)
-	return sheet.SubImage(rect).(*ebiten.Image)
-}
-
-func getEbitenImage(spriteBytes []byte) *ebiten.Image {
-	pngImage, err := png.Decode(bytes.NewReader(spriteBytes))
-	if err != nil {
-		log.Panic()
-	}
-
-	return ebiten.NewImageFromImage(pngImage)
+	return spritesheet.SubImage(rect).(*ebiten.Image)
 }

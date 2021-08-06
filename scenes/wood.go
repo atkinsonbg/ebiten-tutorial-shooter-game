@@ -5,9 +5,9 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-func WoodScene(screen *ebiten.Image, windowWidth int, windowHeight int, json []byte, sprite []byte) {
+func WoodScene(screen *ebiten.Image, windowWidth int, windowHeight int) {
 	imgWoodX := 0
-	imgWood := assets.Wood(json, sprite)
+	imgWood := assets.Wood()
 	imgWoodWidth := imgWood.Bounds().Dx()
 	imgWoodHeight := imgWood.Bounds().Dy() / 2
 	for imgWoodX < windowWidth {

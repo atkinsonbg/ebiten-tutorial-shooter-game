@@ -18,11 +18,11 @@ type Duck struct {
 
 var ducks []Duck
 
-func DuckScene(screen *ebiten.Image, windowWidth int, windowHeight int, currentTick float64, json []byte, sprite []byte) {
-	if len(ducks) == 0 {
-		addDuck()
-	}
+func init() {
+	addDuck()
+}
 
+func DuckScene(screen *ebiten.Image, windowWidth int, windowHeight int, currentTick float64) {
 	if len(ducks) < 4 {
 		lastDuck := ducks[len(ducks)-1]
 		if lastDuck.Duck.X > 200 {
@@ -30,31 +30,29 @@ func DuckScene(screen *ebiten.Image, windowWidth int, windowHeight int, currentT
 		}
 	}
 
-	duckToDelete := 0
 	for i, d := range ducks {
-		ducks[i].Duck.X += 10
-		ducks[i].Stick.X += 10
-		
+		ducks[i].Duck.X += 2
+		ducks[i].Stick.X += 2
+
 		d.Duck.Y = d.Duck.Y - math.Cos(d.Duck.X / 100) * -100
 		d.Stick.Y = d.Duck.Y + 118
 
-		imgDuck := assets.Duck(json, sprite)
+		imgDuck := assets.Duck()
 		imgDuckOpts := &ebiten.DrawImageOptions{}
 		imgDuckOpts.GeoM.Translate(d.Duck.X, d.Duck.Y)
 		screen.DrawImage(imgDuck, imgDuckOpts)
 
-		imgStick := assets.Stick(json, sprite)
+		imgStick := assets.Stick()
 		imgStickOpts := &ebiten.DrawImageOptions{}
 		imgStickOpts.GeoM.Translate(d.Stick.X, d.Stick.Y)
 		screen.DrawImage(imgStick, imgStickOpts)
 		
-		if d.Duck.X > float64(windowWidth) {
-			duckToDelete = i
+		if ducks[i].Duck.X > float64(windowWidth) {
+			ducks[i].Duck.X = -336
+			ducks[i].Duck.Y = 200
+			ducks[i].Stick.X = -298
+			ducks[i].Stick.Y = 318
 		}
-	}
-
-	if duckToDelete > 0 {
-		ducks = append(ducks[:duckToDelete], ducks[duckToDelete+1:]...)
 	}
 }
 
