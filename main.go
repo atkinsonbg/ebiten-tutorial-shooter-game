@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
+	"github.com/atkinsonbg/ebiten-tutorial/assets"
 	"github.com/atkinsonbg/ebiten-tutorial/scenes"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	_ "image/png"
 	"log"
+	"runtime"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
@@ -18,6 +20,7 @@ type Game struct {
 }
 
 func init() {
+
 }
 
 func (g *Game) Update() error {
@@ -25,6 +28,9 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
+	if !assets.RagtimeMusicPlayer.IsPlaying() {
+		assets.RagtimeMusicPlayer.Play()
+	}
 	g.updateTick()
 
 	scenes.BackgroundScene(screen, windowWidth, windowHeight)
@@ -33,7 +39,13 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	scenes.WoodScene(screen, windowWidth, windowHeight)
 	scenes.CurtainsScene(screen, windowWidth, windowHeight)
 
-	ebitenutil.DebugPrint(screen, fmt.Sprintf("%f", ebiten.CurrentFPS()))
+	var m runtime.MemStats
+	runtime.ReadMemStats(&m)
+	ebitenutil.DebugPrint(screen, fmt.Sprintf("%v, Alloc = %v MiB, TotalAlloc = %v MiB, Sys = %v MiB, NumGC = %v\n", ebiten.CurrentFPS(), bToMb(m.Alloc), bToMb(m.TotalAlloc), bToMb(m.Sys), m.NumGC))
+}
+
+func bToMb(b uint64) uint64 {
+	return b / 1024 / 1024
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
