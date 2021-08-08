@@ -17,10 +17,10 @@ var sampleRate = 44100
 
 func init() {
 	audioContext = audio.NewContext(sampleRate)
-	RagtimeMusicPlayer, _ = BackgroundMusicPlayer()
+	RagtimeMusicPlayer = BackgroundMusicPlayer()
 }
 
-func BackgroundMusicPlayer() (*audio.Player, error) {
+func BackgroundMusicPlayer() (*audio.Player) {
 	b := bytes.NewReader(ragtimeMusic)
 	oggS, err := vorbis.DecodeWithSampleRate(sampleRate, b)
 	if err != nil {
@@ -32,5 +32,5 @@ func BackgroundMusicPlayer() (*audio.Player, error) {
 		log.Panicln(err)
 	}
 	p.SetVolume(0.1)
-	return p, nil
+	return p
 }
