@@ -42,3 +42,13 @@ func Stick() *ebiten.Image {
 	img, _ := Objects.GetSprite("stick_woodFixed_outline")
 	return img
 }
+
+func BulletHole() *ebiten.Image {
+	img, _ := Objects.GetSprite("shot_grey_small")
+	return img
+}
+
+func Crosshairs() *ebiten.Image {
+	img, _ := Hud.GetSprite("crosshair_red_small")
+	return img
+}
