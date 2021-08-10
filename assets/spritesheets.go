@@ -82,7 +82,7 @@ func NewSpriteSheet(spriteSheetBytes []byte, metadataBytes []byte) (*SpriteSheet
 	return spriteSheet, nil
 }
 
-func (spriteSheet *SpriteSheet) GetSprite(spriteName string) (*ebiten.Image, error) {
+func (spriteSheet *SpriteSheet) GetSprite(spriteName string, fromCahce bool) (*ebiten.Image, error) {
 	if sprite, ok := spriteSheet.cache[spriteName]; ok {
 		return sprite, nil
 	}
@@ -94,10 +94,12 @@ func (spriteSheet *SpriteSheet) GetSprite(spriteName string) (*ebiten.Image, err
 	r := image.Rect(x0, y0, x1, y1)
 
 	img := spriteSheet.image.SubImage(r)
-
 	sprite := ebiten.NewImageFromImage(img)
 
-	spriteSheet.cache[spriteName] = sprite
+	if !fromCahce {
+		return sprite, nil
+	}
 
+	spriteSheet.cache[spriteName] = sprite
 	return sprite, nil
 }

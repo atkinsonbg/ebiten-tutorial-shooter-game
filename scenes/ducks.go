@@ -12,6 +12,7 @@ type Img struct {
 }
 
 type Duck struct {
+	DuckImage *ebiten.Image
 	Duck Img
 	Stick Img
 	BulletHole Img
@@ -21,14 +22,17 @@ type Duck struct {
 var ducks []Duck
 
 func init() {
-	addDuck()
 }
 
 func DuckScene(screen *ebiten.Image, windowWidth int, windowHeight int, currentTick float64, currentX int, currentY int) {
 	if len(ducks) < 4 {
-		lastDuck := ducks[len(ducks)-1]
-		if lastDuck.Duck.X > 200 {
+		if (len(ducks) == 0) {
 			addDuck()
+		} else {
+			lastDuck := ducks[len(ducks)-1]
+			if lastDuck.Duck.X > 200 {
+				addDuck()
+			}
 		}
 	}
 
@@ -49,8 +53,7 @@ func DuckScene(screen *ebiten.Image, windowWidth int, windowHeight int, currentT
 				}
 			}
 		}
-
-		imgDuck := assets.Duck()
+		
 		imgDuckOpts := &ebiten.DrawImageOptions{}
 		imgDuckOpts.GeoM.Translate(d.Duck.X, d.Duck.Y)
 
@@ -58,10 +61,10 @@ func DuckScene(screen *ebiten.Image, windowWidth int, windowHeight int, currentT
 			imgHole := assets.BulletHole()
 			imgHoleOpts := &ebiten.DrawImageOptions{}
 			imgHoleOpts.GeoM.Translate(d.BulletHole.X, d.BulletHole.Y)
-			imgDuck.DrawImage(imgHole, imgHoleOpts)
+			d.DuckImage.DrawImage(imgHole, imgHoleOpts)
 		}
 
-		screen.DrawImage(imgDuck, imgDuckOpts)
+		screen.DrawImage(d.DuckImage, imgDuckOpts)
 
 		imgStick := assets.Stick()
 		imgStickOpts := &ebiten.DrawImageOptions{}
@@ -75,6 +78,7 @@ func DuckScene(screen *ebiten.Image, windowWidth int, windowHeight int, currentT
 			ducks[i].Stick.Y = 288
 			ducks[i].HasBeenShot = false
 			ducks[i].BulletHole = Img{}
+			ducks[i].DuckImage = assets.Duck()
 		}
 
 		cpx, cpy := ebiten.CursorPosition()
@@ -91,6 +95,7 @@ func addDuck() {
 	startingStick := Img{-98,288}
 
 	d := Duck{}
+	d.DuckImage = assets.Duck()
 	d.Duck = startingDuck
 	d.Stick = startingStick
 	ducks = append(ducks, d)
