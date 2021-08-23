@@ -1,14 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"github.com/atkinsonbg/ebiten-tutorial/assets"
 	"github.com/atkinsonbg/ebiten-tutorial/scenes"
 	"github.com/atkinsonbg/ebiten-tutorial/utils"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	_ "image/png"
 	"log"
-	"runtime"
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -16,11 +13,11 @@ import (
 
 var windowWidth = 900
 var windowHeight = 520
-const debouncer = 500 * time.Millisecond
 
 type Game struct {
 	tick float64
 	lastClickedAt time.Time
+	currentScore *utils.Score
 }
 
 func init() {
@@ -32,6 +29,9 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
+	if g.currentScore == nil {
+		g.currentScore = &utils.Score{}
+	}
 	var y = 0
 	var x = 0
 	g.lastClickedAt, x, y = utils.CheckMouseClick(g.lastClickedAt)
@@ -42,19 +42,13 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	g.updateTick()
 
 	scenes.BackgroundScene(screen, windowWidth, windowHeight)
-	scenes.DuckScene(screen, windowWidth, windowHeight, g.tick, x, y)
+	scenes.DuckScene(screen, windowWidth, windowHeight, g.tick, x, y, g.currentScore)
 	scenes.WaveScene(screen, windowWidth, windowHeight, g.tick)
 	scenes.WoodScene(screen, windowWidth, windowHeight)
 	scenes.CurtainsScene(screen, windowWidth, windowHeight)
+	scenes.HudTextScene(screen, windowWidth, windowHeight, *g.currentScore)
 
-	var m runtime.MemStats
-	runtime.ReadMemStats(&m)
-	cpx, cpy := ebiten.CursorPosition()
-	ebitenutil.DebugPrint(screen, fmt.Sprintf("%v, Alloc = %v MiB, TotalAlloc = %v MiB, Sys = %v MiB, NumGC = %v, Cursor, X= %v, Y= %v", ebiten.CurrentFPS(), bToMb(m.Alloc), bToMb(m.TotalAlloc), bToMb(m.Sys), m.NumGC, cpx, cpy))
-}
-
-func bToMb(b uint64) uint64 {
-	return b / 1024 / 1024
+	utils.PrintMemUsage(screen)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {

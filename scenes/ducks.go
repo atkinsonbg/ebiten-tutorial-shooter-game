@@ -2,6 +2,7 @@ package scenes
 
 import (
 	"github.com/atkinsonbg/ebiten-tutorial/assets"
+	"github.com/atkinsonbg/ebiten-tutorial/utils"
 	"github.com/hajimehoshi/ebiten/v2"
 	"math"
 )
@@ -24,7 +25,7 @@ var ducks []Duck
 func init() {
 }
 
-func DuckScene(screen *ebiten.Image, windowWidth int, windowHeight int, currentTick float64, currentX int, currentY int) {
+func DuckScene(screen *ebiten.Image, windowWidth int, windowHeight int, currentTick float64, currentX int, currentY int, currentScore *utils.Score) {
 	if len(ducks) < 4 {
 		if (len(ducks) == 0) {
 			addDuck()
@@ -50,10 +51,11 @@ func DuckScene(screen *ebiten.Image, windowWidth int, windowHeight int, currentT
 					assets.HitPlayer.Rewind()
 					ducks[i].BulletHole = Img{float64(currentX) - d.Duck.X, float64(currentY) - d.Duck.Y}
 					ducks[i].HasBeenShot = true
+					currentScore.UpdateScore(10)
 				}
 			}
 		}
-		
+
 		imgDuckOpts := &ebiten.DrawImageOptions{}
 		imgDuckOpts.GeoM.Translate(d.Duck.X, d.Duck.Y)
 
