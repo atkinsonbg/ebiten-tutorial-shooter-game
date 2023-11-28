@@ -1,1 +1,28 @@
-Throughout the year, [Name] distinguished themselves as the team's technical lead, taking the helm in architecting our core solution. Their mentorship was instrumental, guiding every team member through engineering best practices and facilitating the transition to a new programming language. [Name] not only championed rigorous testing methodologies but also showcased adeptness in managing up, effectively communicating and sometimes pushing back on requirements and timelines to ensure the team's success. Their strategic decision to adopt LocalStack greatly expedited our project's progression. As a force multiplier, [Name] consistently amplified the team's collective capabilities, proving their invaluable contribution not just in technical expertise but also in navigating organizational complexities.
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "rds:FailoverGlobalCluster",
+                "rds:DescribeGlobalClusters"
+            ],
+            "Resource": [
+                "arn:aws:rds:region:account-id:global-cluster:global-cluster-id",
+                "arn:aws:rds:region:account-id:db:db-instance-id"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "route53:ChangeResourceRecordSets",
+                "route53:ListResourceRecordSets"
+            ],
+            "Resource": [
+                "arn:aws:route53:::hostedzone/zone-id"
+            ]
+        }
+    ]
+}
+```
